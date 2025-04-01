@@ -4,6 +4,7 @@ import AppLayout from "./ui/layout/AppLayout";
 import SignIn from "./ui/pages/AuthPages/SignIn";
 import SignUp from "./ui/pages/AuthPages/SignUp";
 import Home from "./ui/pages/Dashboard/Home";
+import PrivateRoute from "./infrastructure/routes/PrivateRoute";
 
 export default function App() {
   return (
@@ -11,15 +12,18 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-          {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
+          {/* Rutas protegidas con layout */}
+          <Route element={<PrivateRoute />}>
+            <Route element={<AppLayout />}>
+              <Route index path="/" element={<Home />} />
+            </Route>
           </Route>
 
-          {/* Auth Layout */}
+          {/* Rutas públicas */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
         </Routes>
+
       </Router>
     </>
   );
