@@ -17,14 +17,40 @@ export default function SignUpForm() {
   const navigate = useNavigate();
   const authService = new AuthServiceImpl();
 
+  
+  const isValidEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const fullName = `${firstName} ${lastName}`;
+  
+    const fullName = `${firstName.trim()} ${lastName.trim()}`;
+  
+    if (!firstName || !lastName || !email || !password) {
+      alert("Por favor, completa todos los campos.");
+      return;
+    }
+  
+    if (!isValidEmail(email)) {
+      alert("Por favor, ingresa un correo electrónico válido.");
+      return;
+    }
+  
+    if (password.length < 8) {
+      alert("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+  
+    if (!isChecked) {
+      alert("Debes aceptar los Términos y Condiciones.");
+      return;
+    }
+  
     const user = await authService.register(fullName, email, password);
   
     if (user) {
-      localStorage.setItem("token", user.token);
-  
       navigate("/");
     } else {
       alert("Registro fallido. Intenta con otros datos.");
